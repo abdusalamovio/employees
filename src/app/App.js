@@ -17,6 +17,7 @@ class App extends React.Component {
         { name: "Alex M.", salary: 3000, increase: true, rise: false, id: 1 },
         { name: "Carl W.", salary: 5000, increase: false, rise: false, id: 2 },
       ],
+      term: "",
     };
     this.maxId = 3;
   }
@@ -52,19 +53,32 @@ class App extends React.Component {
     }));
   };
 
+  searchEmp = (items, term) => {
+    if (term.length === 0) return items;
+    return items.filter((item) => {
+      return item.name.indexOf(term) > -1;
+    });
+  };
+
+  onUpdateSearch = (term) => {
+    this.setState({ term });
+  };
+
   render() {
-    const employees = this.state.data.length;
-    const increased = this.state.data.filter((item) => item.increase).length;
+    const { data, term } = this.state;
+    const employees = data.length;
+    const increased = data.filter((item) => item.increase).length;
+    const visibleData = this.searchEmp(data, term);
 
     return (
       <div className="app">
         <EmpInfo employees={employees} increased={increased} />
         <div className="empSearch">
-          <EmpSearch />
+          <EmpSearch onUpdateSearch={this.onUpdateSearch} />
           <EmpFilter />
         </div>
         <EmpList
-          data={this.state.data}
+          data={visibleData}
           onDelete={this.deleteItem}
           onToggleProp={this.onToggleProp}
         />
