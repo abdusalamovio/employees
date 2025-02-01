@@ -16,12 +16,21 @@ class EmpAddForm extends React.Component {
     });
   };
 
+  onSubmit = (e) => {
+    e.preventDefault();
+    this.props.onAdd(this.state.name, this.state.salary);
+    this.setState = {
+      name: "",
+      salary: "",
+    };
+  };
+
   render() {
     const { name, salary } = this.state;
     return (
       <div className="empAddForm">
         <h3>Добавьте нового сотрудника</h3>
-        <form>
+        <form onSubmit={this.onSubmit}>
           <input
             onChange={this.onValueChange}
             value={name}
