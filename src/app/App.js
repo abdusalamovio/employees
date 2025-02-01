@@ -13,9 +13,9 @@ class App extends React.Component {
     super(props);
     this.state = {
       data: [
-        { name: "John C.", salary: 800, increase: false, id: 0 },
-        { name: "Alex M.", salary: 3000, increase: true, id: 1 },
-        { name: "Carl W.", salary: 5000, increase: false, id: 2 },
+        { name: "John C.", salary: 800, increase: false, rise: true, id: 0 },
+        { name: "Alex M.", salary: 3000, increase: true, rise: false, id: 1 },
+        { name: "Carl W.", salary: 5000, increase: false, rise: false, id: 2 },
       ],
     };
     this.maxId = 3;
@@ -23,9 +23,7 @@ class App extends React.Component {
 
   deleteItem = (id) => {
     this.setState(({ data }) => {
-      return {
-        data: data.filter((item) => item.id !== id),
-      };
+      return { data: data.filter((item) => item.id !== id) };
     });
   };
 
@@ -34,25 +32,42 @@ class App extends React.Component {
       name,
       salary,
       increase: false,
+      rise: false,
       id: this.maxId++,
     };
     this.setState(({ data }) => {
       const newArray = [...data, newItem];
-      return {
-        data: newArray,
-      };
+      return { data: newArray };
     });
   };
 
+  onToggleProp = (id, prop) => {
+    this.setState(({ data }) => ({
+      data: data.map((item) => {
+        if (item.id === id) {
+          return { ...item, [prop]: !item[prop] };
+        }
+        return item;
+      }),
+    }));
+  };
+
   render() {
+    const employees = this.state.data.length;
+    const increased = this.state.data.filter((item) => item.increase).length;
+
     return (
       <div className="app">
-        <EmpInfo />
+        <EmpInfo employees={employees} increased={increased} />
         <div className="empSearch">
           <EmpSearch />
           <EmpFilter />
         </div>
-        <EmpList data={this.state.data} onDelete={this.deleteItem} />
+        <EmpList
+          data={this.state.data}
+          onDelete={this.deleteItem}
+          onToggleProp={this.onToggleProp}
+        />
         <EmpAddForm onAdd={this.addItem} />
       </div>
     );
