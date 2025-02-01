@@ -1,12 +1,12 @@
 import "./empListItem.css";
 
 const EmpListItem = ({ name, salary, increase }) => {
-  let className = "list-group-item";
+  let classNames = "list-group-item";
   if (increase) {
-    className += " increase";
+    classNames += " increase";
   }
   return (
-    <li className={className}>
+    <li className={classNames}>
       <span className="name">{name}</span>
       <input className="salary" defaultValue={salary + "$"} type="text" />
       <div className="buttons">
